@@ -2,6 +2,8 @@
 from google.cloud import vision
 import os
 import threading
+import cv2
+import time
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "secret.json"
 materials = ['plastic', 'paper', 'metal', 'glass', 'cardboard']
@@ -33,8 +35,21 @@ def detect_labels(path, results, lock):
         for material in materials:
             results[material] += local_result[material]
 
+def capture_image(file_path):
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("unable to access camera")
+        exit()
+
+    ret, frame = cap.read()
+    cv2.imwrite(file_path, frame)
+    cap.release()
+
 if __name__ == "__main__":
-    image_paths = ["test3.jpg", "test4.jpg"]
+    image_paths = ["test1.jpg", "test2.jpg"]
+    for path in image_paths:
+        capture_image(path)
+        time.sleep(1)
     combined_results = {material: 0 for material in materials}
     threads = []
     lock = threading.Lock()
