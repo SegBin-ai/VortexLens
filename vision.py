@@ -50,6 +50,7 @@ if __name__ == "__main__":
     for path in image_paths:
         capture_image(path)
         time.sleep(1)
+        
     combined_results = {material: 0 for material in materials}
     threads = []
     lock = threading.Lock()
