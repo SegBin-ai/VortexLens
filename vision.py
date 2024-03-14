@@ -3,7 +3,7 @@ from google.cloud import vision
 import os
 import threading
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "secrets-315205-449d7358815b.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "secret.json"
 materials = ['plastic', 'paper', 'metal', 'glass', 'cardboard']
 client = vision.ImageAnnotatorClient()
 
