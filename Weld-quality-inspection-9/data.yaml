@@ -12,6 +12,6 @@ roboflow:
   url: https://universe.roboflow.com/welding-2bplp/weld-quality-inspection-rei9l/dataset/9
   version: 9
   workspace: welding-2bplp
-test: ../test/images
-train: Weld-quality-inspection-9/train/images
-val: Weld-quality-inspection-9/valid/images
+test: /Users/aadityavoruganti/Desktop/Aadi/TerraVortex/VortexLens/Weld-quality-inspection-9/test/images
+train: /Users/aadityavoruganti/Desktop/Aadi/TerraVortex/VortexLens/Weld-quality-inspection-9/train/images
+val: /Users/aadityavoruganti/Desktop/Aadi/TerraVortex/VortexLens/Weld-quality-inspection-9/valid/images
