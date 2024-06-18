@@ -1,0 +1,12 @@
+We have a reference image and we have to detect all the screws in this image. then we will be given a webcam feed of the same product in the initial image,
+however, the camera will be moving so we will have to somehow keep track of all the screw locations in real time. 
+There are 3 main issues with this problem.
+
+1) The initial mapping from the reference image to the webcam feed. Since they will be of the same product, we will need to map the locations in the reference image to that in the webcam frame. 
+(maybe use SIFT for feature mapping? however screws are too small and all mostly look the same)
+
+2) we will need to keep tracking these locations as the camera moves around in real time (object tracking).
+(use ByteTrack or DeepSort to perform real-time object tracking)
+
+3) we will need to run a binary classifier model on each location to check whether a screw has been placed or not.
+(trained the Xception model to detect whether screw or not. will probably need hardware acceleration for real time performance)
