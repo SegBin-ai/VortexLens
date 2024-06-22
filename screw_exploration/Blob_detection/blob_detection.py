@@ -5,7 +5,7 @@ from keras.models import model_from_json
 
 
 IMAGE_SIZE = (71, 71)
-MIN_CONFIDENCE = 0.5
+MIN_CONFIDENCE = 0.2
 
 model_path = 'screw_head_detector-2.h5'
 with h5py.File(model_path, 'r') as f:
@@ -50,6 +50,8 @@ def detect_screws_blobs(image_path):
     detector = cv2.SimpleBlobDetector_create(params)
 
     keypoints = detector.detect(gray)
+    
+    screw_locations = []
 
     for keypoint in keypoints:
         x, y = int(keypoint.pt[0]), int(keypoint.pt[1])
@@ -66,17 +68,16 @@ def detect_screws_blobs(image_path):
         prediction = model.predict(proposal)
         score = prediction[0][0]
         
+        
         #The model has been trained so that a score closer to 0 means a screw head is present
 
         if score < MIN_CONFIDENCE:
+            screw_locations.append((x, y))
             color = (0, 255, 0)
             cv2.rectangle(img, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 2)
             cv2.putText(img, f'Score: {score:.2f}', (top_left_x, top_left_y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     #saves the image with the detected screws
-    cv2.imwrite("detected_screws_blobs_model.jpg", img)
-
-
-test_image_path = "test6.jpeg"
-detect_screws_blobs(test_image_path)
+    # cv2.imwrite("detected_screws_blobs_model_2.jpg", img)
+    return screw_locations
