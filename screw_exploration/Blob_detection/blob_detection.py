@@ -8,24 +8,26 @@ IMAGE_SIZE = (71, 71)
 MIN_CONFIDENCE = 0.2
 
 model_path = 'screw_head_detector-2.h5'
-with h5py.File(model_path, 'r') as f:
-    model_config = f.attrs.get('model_config')
 
-# Since model_config is already a string, no need to decode
-model = model_from_json(model_config)
+def model_init():
+    
+    with h5py.File(model_path, 'r') as f:
+        model_config = f.attrs.get('model_config')
 
-# Load the model's weights
-model.load_weights(model_path)
+    model = model_from_json(model_config)
+    model.load_weights(model_path)
+    return model
+
 
 #required pre processing for the model
-
 def preprocess_proposal(region, image_size=IMAGE_SIZE):
     proposal = cv2.resize(region, image_size)
     proposal = proposal.astype('float32') / 255.0
     proposal = np.expand_dims(proposal, axis=0)
     return proposal
 
-def detect_screws_blobs(image_path):
+
+def detect_screws_blobs(image_path, model):
     """
     Detect screw heads in the image using blob detection and classify using the model.
     """
@@ -73,11 +75,45 @@ def detect_screws_blobs(image_path):
 
         if score < MIN_CONFIDENCE:
             screw_locations.append((x, y))
-            color = (0, 255, 0)
-            cv2.rectangle(img, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 2)
-            cv2.putText(img, f'Score: {score:.2f}', (top_left_x, top_left_y - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            # color = (0, 255, 0)
+            # cv2.rectangle(img, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 2)
+            # cv2.putText(img, f'Score: {score:.2f}', (top_left_x, top_left_y - 10),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     #saves the image with the detected screws
-    # cv2.imwrite("detected_screws_blobs_model_2.jpg", img)
+    # cv2.imwrite("results/detected_screws_blobs_model_2.jpg", img)
     return screw_locations
+
+
+
+def detect_using_locations(web_frame, screw_locations, model):
+    for pos in screw_locations:
+        x, y = int(pos[0][0]), int(pos[0][1])
+        top_left_x = max(0, x - 7)
+        top_left_y = max(0, y - 7)
+        bottom_right_x = min(web_frame.shape[1], x + 7)
+        bottom_right_y = min(web_frame.shape[0], y + 7)
+        
+        
+        region = web_frame[top_left_y:bottom_right_y, top_left_x:bottom_right_x]
+        if region.size == 0:
+            continue
+        
+        proposal = preprocess_proposal(region)
+        prediction = model.predict(proposal)
+        score = prediction[0][0]
+        
+        if score < MIN_CONFIDENCE:
+            color = (0, 255, 0)
+            cv2.rectangle(web_frame, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 2)
+            cv2.putText(web_frame, f'Score: {score:.2f}', (top_left_x, top_left_y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            
+        else:
+            color = (0, 0, 255)
+            cv2.rectangle(web_frame, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 2)
+            cv2.putText(web_frame, f'Score: {score:.2f}', (top_left_x, top_left_y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            
+            
+    return web_frame
