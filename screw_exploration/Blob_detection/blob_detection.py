@@ -5,9 +5,9 @@ from keras.models import model_from_json
 
 
 IMAGE_SIZE = (71, 71)
-MIN_CONFIDENCE = 0.01
+MIN_CONFIDENCE = 1
 
-model_path = 'screw_head_detector-2.h5'
+model_path = 'C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\screw_head_detector-2.h5'
 
 def model_init():
     
@@ -81,7 +81,7 @@ def detect_screws_blobs(image_path, model):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     #saves the image with the detected screws
-    cv2.imwrite("results/detected_screws_blobs_model_2.jpg", img)
+    cv2.imwrite('C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\results\\detected_screws_blobs_model_2.jpg', img)
     return screw_locations
 
 

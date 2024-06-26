@@ -81,7 +81,7 @@ def main(reference_image_path, video_path=0, fps_limit=10):
 
 
 if __name__ == '__main__':
-    main("test_images/calc.jpeg")
-    # test_with_image("test_images/calc.jpeg", "results/calc_test.jpeg")
+    #main("test_images/calc.jpeg")
+    test_with_image('C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\Screw_1.jpg', 'C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\Screw_1_test.jpg')
     # test_with_image("test_images/test6.jpeg", "test_images/webcam4.jpeg")
     # test_with_image("test_images/screw_reference.png", "test_images/screw_test4.png")

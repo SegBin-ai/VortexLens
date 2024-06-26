@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-MIN_MATCH_COUNT = 40
+MIN_MATCH_COUNT = 0
 
 
 def detect_and_match_features_orb(webcam_img, flann, kp_ref, des_ref, orb):
@@ -67,9 +67,9 @@ def find_homography_and_transform(ref_img, webcam_img, kp_ref, kp_frame, good_ma
 
     H, mask = cv2.findHomography(ref_pts, frame_pts, cv2.RANSAC, 5.0)
     # cv2.imwrite("results/calc_test.jpeg", webcam_img)
-    if H is None or not (0.01 < np.linalg.det(H) < 100):
-        print("Invalid homography")
-        return False, None
+    # if H is None or not (0.01 < np.linalg.det(H) < 100):
+    #     print("Invalid homography")
+    #     return False, None
     
     
     screw_positions = np.float32(screw_locations).reshape(-1, 1, 2)
@@ -82,12 +82,14 @@ def find_homography_and_transform(ref_img, webcam_img, kp_ref, kp_frame, good_ma
     
     # This code is for testing purposes
     # It is for viewing the matches between two images
-    # matches_mask = mask.ravel().tolist()
-    # draw_params = dict(matchColor=(0, 255, 0), singlePointColor=None, matchesMask=matches_mask, flags=2)
-    # img_matches = cv2.drawMatches(ref_img, kp_ref, webcam_img, kp_frame, good_matches, None, **draw_params)
-    # cv2.imshow("Matches", img_matches)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    matches_mask = mask.ravel().tolist()
+    draw_params = dict(matchColor=(0, 255, 0), singlePointColor=None, matchesMask=matches_mask, flags=2)
+    img_matches = cv2.drawMatches(ref_img, kp_ref, webcam_img, kp_frame, good_matches, None, **draw_params)
+    img_matches_resized = cv2.resize(img_matches, (1500, 2000))
+
+    cv2.imshow("Matches", img_matches_resized)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     return True, transformed_positions
 
 
@@ -95,7 +97,7 @@ def draw_matches(webcam_frame, screw_positions):
     for pos in screw_positions:
         x, y = pos[0]
         cv2.circle(webcam_frame, (int(x), int(y)), 10, (0, 255, 0), -1)
-
-    cv2.imshow("Mapped Screw Positions", webcam_frame)
+    img_matches_resized = cv2.resize(webcam_frame, (1500, 2000))
+    cv2.imshow("Mapped Screw Positions", img_matches_resized)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
