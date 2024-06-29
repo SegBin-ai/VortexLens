@@ -5,7 +5,7 @@ from keras.models import model_from_json
 
 
 IMAGE_SIZE = (71, 71)
-MIN_CONFIDENCE = 1
+MIN_CONFIDENCE = 0.18
 
 model_path = 'C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\screw_head_detector-2.h5'
 
