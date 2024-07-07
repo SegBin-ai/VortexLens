@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Load the image using OpenCV
-image = cv2.imread(image_path)
+image = cv2.imread('C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match24.jpg')
 
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -33,8 +33,8 @@ if detected_circles is not None:
         cv2.circle(image, (x, y), 1, (0, 0, 255), 3)
 
 # Save the annotated image
-annotated_image_path = "/mnt/data/annotated_screws_screw_holes_opencv.jpg"
+annotated_image_path = "annotated_screws_screw_holes_opencv.jpg"
 cv2.imwrite(annotated_image_path, image)
+cv2.imshow("Annotated Image", image)
 
-# Display the path of the annotated image
-annotated_image_path
+

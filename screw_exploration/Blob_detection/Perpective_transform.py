@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from scipy.spatial import distance_matrix
 
-MIN_MATCH_COUNT = 20
+MIN_MATCH_COUNT = 15
 
 def get_fginn_indexes(dm, km, th=0.8):
     vals, idxs_in_2 = torch.min(dm, dim=1)
@@ -66,7 +66,7 @@ def detect_and_match_features_orb(webcam_img, flann, kp_ref, des_ref, orb):
         print("Not enough descriptors found.")
         return kp_ref, kp_frame, []
     
-    return match_features(des_ref, des_frame, kp_ref, kp_frame, use_fginn=True)
+    return match_features(des_ref, des_frame, kp_ref, kp_frame, use_fginn=False)
 
 
 def detect_and_match_features_surf(ref_img, webcam_img):

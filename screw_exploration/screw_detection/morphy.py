@@ -1,4 +1,6 @@
 import cv2
+image = cv2.imread('C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match25.jpg')
+
 # Convert the image to grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -38,7 +40,7 @@ for contour in contours:
                 cv2.circle(image, (int(x), int(y)), int(radius), (255, 0, 0), 2)
 
 # Save the annotated image
-annotated_image_path = "/mnt/data/annotated_screws_and_holes.jpg"
+annotated_image_path = "annotated_screws_and_holes.jpg"
 cv2.imwrite(annotated_image_path, image)
 
 # Display the path of the annotated image

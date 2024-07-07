@@ -1,0 +1,28 @@
+# 
+# Wavefront material file
+# Created with Kaydara FBX
+# 
+
+newmtl Vortex_Lense_Goog_4Material0
+Ka 0.600000 0.600000 0.600000
+Kd 0.600000 0.600000 0.600000
+Ks 0.000000 0.000000 0.000000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Vortex_Lense_Goog_4Material1
+Ka 0.964706 0.627451 0.407843
+Kd 0.964706 0.627451 0.407843
+Ks 0.000000 0.000000 0.000000
+illum 2
+Ns 20.000000
+Tr 1.000000
+
+newmtl Vortex_Lense_Goog_4Material2
+Ka 0.611765 0.658824 0.670588
+Kd 0.611765 0.658824 0.670588
+Ks 0.000000 0.000000 0.000000
+illum 2
+Ns 20.000000
+Tr 1.000000

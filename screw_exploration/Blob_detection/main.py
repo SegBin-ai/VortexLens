@@ -7,8 +7,8 @@ from multiprocessing.pool import ThreadPool
 #from asift import affine_detect, init_feature, filter_matches
 
 def preprocess_proposal(image):
-    blur = cv2.medianBlur(image, 5)
-    # blur = image
+    #blur = cv2.medianBlur(image, 5)
+    blur = image
     # thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     return blur
 
@@ -124,9 +124,9 @@ def main(reference_image_path, video_path=0, fps_limit=10, output_file= "C:\\Use
 
 
 if __name__ == '__main__':
-    #main("C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\test1.jpg")
+    main("C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match2.jpg")
     
-    test_with_image("C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\test1.jpg", "C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match.jpg")
+    # test_with_image("C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match2.jpg", "C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\test_images\\match.jpg")
     # test_with_image("test_images/mvp3.jpg", "test_images/mvp2.jpg")
     # test_with_image("test_images/screw_reference.png", "test_images/screw_test4.png")
 
