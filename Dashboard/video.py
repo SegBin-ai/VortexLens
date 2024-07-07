@@ -61,7 +61,7 @@ styles = {
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(html.H1("TerraVortex", style=styles['header'])),
-        dbc.Col(html.Img(src='https://raw.githubusercontent.com/SegBin-ai/VortexLens/windows-edition/Dashboard/Logo.png', style={'width': '100px', 'height': '100px'}), width=2)
+        dbc.Col(html.Img(src='https://raw.githubusercontent.com/SegBin-ai/VortexLens/windows-edition/Dashboard/Logo.png', style={'width': '150px', 'height': '150px'}), width="auto")
     ]),
     dbc.Row([
         dbc.Col([
