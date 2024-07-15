@@ -7,7 +7,7 @@ import os
 from google.cloud import storage
 
 # Initialize the Dash app
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 # Define styles
 secondary_color = '#DC143C'  # Crimson
@@ -93,7 +93,8 @@ def upload_to_gcs(file_name, file_content, title, description):
     }
     
     blob.metadata = metadata
-    blob.upload_from_string(file_content, content_type='video/mp4')
+    content_type = 'video/mp4' if file_name.endswith('.mp4') else 'video/quicktime'
+    blob.upload_from_string(file_content, content_type=content_type)
     return blob.public_url
 
 def fetch_videos_metadata():
@@ -107,7 +108,8 @@ def fetch_videos_metadata():
             video_info = {
                 'url': blob.public_url,
                 'title': blob.metadata['title'],
-                'description': blob.metadata['description']
+                'description': blob.metadata['description'],
+                'content_type': blob.content_type
             }
             videos.append(video_info)
     return videos
@@ -134,7 +136,8 @@ upload_layout = html.Div([
                 id='upload-video',
                 children=html.Div(['Drag and Drop or ', html.A('Select Files')]),
                 style=styles['upload'],
-                multiple=False
+                multiple=False,
+                accept=".mp4,.mov"
             ),
             html.Div(id='output-filename', style={'margin-top': '10px'}),
             dbc.Label("Title"),
