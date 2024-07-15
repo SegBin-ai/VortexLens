@@ -57,29 +57,72 @@ styles = {
         'color': accent_color,
         'borderColor': secondary_color,
         'marginBottom': '10px'
+    },
+    'gallery': {
+        'display': 'flex',
+        'flexWrap': 'wrap',
+        'justifyContent': 'space-around',
+        'paddingTop': '20px'
+    },
+    'card': {
+        'width': '300px',
+        'margin': '10px',
+        'border': f'1px solid {secondary_color}',
+        'borderRadius': '5px',
+        'boxShadow': '2px 2px 5px rgba(0,0,0,0.1)'
+    },
+    'thumbnail': {
+        'width': '100%'
+    },
+    'metadata': {
+        'padding': '10px'
     }
 }
 
 # Google Cloud Storage setup
 bucket_name = 'factory-work'  # Replace with your bucket name
 
-def upload_to_gcs(file_name, file_content):
+def upload_to_gcs(file_name, file_content, title, description):
     client = storage.Client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(file_name)
-
-    if file_name.endswith('.mp4'):
-        content_type = 'video/mp4'
-    elif file_name.endswith('.mov'):
-        content_type = 'video/quicktime'
-    else:
-        raise ValueError("Unsupported file type")
-
-    blob.upload_from_string(file_content, content_type=content_type)
+    
+    metadata = {
+        'title': title,
+        'description': description
+    }
+    
+    blob.metadata = metadata
+    blob.upload_from_string(file_content, content_type='video/mp4')
     return blob.public_url
+
+def fetch_videos_metadata():
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blobs = bucket.list_blobs()
+
+    videos = []
+    for blob in blobs:
+        if blob.metadata and 'title' in blob.metadata and 'description' in blob.metadata:
+            video_info = {
+                'url': blob.public_url,
+                'title': blob.metadata['title'],
+                'description': blob.metadata['description']
+            }
+            videos.append(video_info)
+    return videos
 
 # Layout of the Dash app
 app.layout = dbc.Container([
+    dbc.Tabs([
+        dbc.Tab(label='Upload', tab_id='upload-tab'),
+        dbc.Tab(label='Gallery', tab_id='gallery-tab')
+    ], id='tabs', active_tab='upload-tab'),
+    
+    html.Div(id='tab-content', style=styles['container'])
+])
+
+upload_layout = html.Div([
     dbc.Row([
         dbc.Col(html.H1("TerraVortex", style=styles['header'])),
         dbc.Col(html.Img(src='https://raw.githubusercontent.com/SegBin-ai/VortexLens/windows-edition/Dashboard/Logo.png', style={'width': '150px', 'height': '150px'}), width="auto")
@@ -91,8 +134,7 @@ app.layout = dbc.Container([
                 id='upload-video',
                 children=html.Div(['Drag and Drop or ', html.A('Select Files')]),
                 style=styles['upload'],
-                multiple=False,
-                accept=".mp4,.mov"
+                multiple=False
             ),
             html.Div(id='output-filename', style={'margin-top': '10px'}),
             dbc.Label("Title"),
@@ -109,7 +151,22 @@ app.layout = dbc.Container([
             html.Video(id='output-video', controls=True, style=styles['video'])
         ])
     ])
-], fluid=True, style=styles['container'])
+])
+
+gallery_layout = html.Div([
+    html.H1("Video Gallery", style=styles['header']),
+    html.Div(id='gallery-content', style=styles['gallery'])
+])
+
+@app.callback(
+    Output('tab-content', 'children'),
+    Input('tabs', 'active_tab')
+)
+def render_tab_content(active_tab):
+    if active_tab == 'upload-tab':
+        return upload_layout
+    elif active_tab == 'gallery-tab':
+        return gallery_layout
 
 # Callback to update filename immediately after file is uploaded
 @app.callback(
@@ -142,7 +199,7 @@ def update_output(n_clicks, title, description, video_content, filename):
         video_data = base64.b64decode(content_string)
 
         # Upload to Google Cloud Storage
-        public_url = upload_to_gcs(filename, video_data)
+        public_url = upload_to_gcs(filename, video_data, title, description)
 
         # Return the public URL to display the video
         video_src = public_url
@@ -150,6 +207,33 @@ def update_output(n_clicks, title, description, video_content, filename):
         video_src = ''
 
     return title, description, video_src
+
+@app.callback(
+    Output('gallery-content', 'children'),
+    Input('tabs', 'active_tab')
+)
+def update_gallery(active_tab):
+    if active_tab != 'gallery-tab':
+        raise PreventUpdate
+
+    videos = fetch_videos_metadata()
+    
+    if not videos:
+        return html.P("No videos available.")
+
+    gallery_items = []
+    for video in videos:
+        gallery_items.append(
+            dbc.Card([
+                html.Video(src=video['url'], controls=True, style=styles['thumbnail']),
+                html.Div([
+                    html.H4(video['title']),
+                    html.P(video['description'])
+                ], style=styles['metadata'])
+            ], style=styles['card'])
+        )
+
+    return gallery_items
 
 # Run the app
 if __name__ == '__main__':
