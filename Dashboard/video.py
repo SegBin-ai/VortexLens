@@ -2,6 +2,9 @@ from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+import base64
+import os
+from google.cloud import storage
 
 # Initialize the Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -57,6 +60,24 @@ styles = {
     }
 }
 
+# Google Cloud Storage setup
+bucket_name = 'factory-work'  # Replace with your bucket name
+
+def upload_to_gcs(file_name, file_content):
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(file_name)
+
+    if file_name.endswith('.mp4'):
+        content_type = 'video/mp4'
+    elif file_name.endswith('.mov'):
+        content_type = 'video/quicktime'
+    else:
+        raise ValueError("Unsupported file type")
+
+    blob.upload_from_string(file_content, content_type=content_type)
+    return blob.public_url
+
 # Layout of the Dash app
 app.layout = dbc.Container([
     dbc.Row([
@@ -70,7 +91,8 @@ app.layout = dbc.Container([
                 id='upload-video',
                 children=html.Div(['Drag and Drop or ', html.A('Select Files')]),
                 style=styles['upload'],
-                multiple=False
+                multiple=False,
+                accept=".mp4,.mov"
             ),
             html.Div(id='output-filename', style={'margin-top': '10px'}),
             dbc.Label("Title"),
@@ -107,14 +129,23 @@ def update_filename(filename):
     [Input('submit-button', 'n_clicks')],
     [State('video-title', 'value'),
      State('video-description', 'value'),
-     State('upload-video', 'contents')]
+     State('upload-video', 'contents'),
+     State('upload-video', 'filename')]
 )
-def update_output(n_clicks, title, description, video_content):
+def update_output(n_clicks, title, description, video_content, filename):
     if n_clicks is None:
         raise PreventUpdate
 
     if video_content is not None:
-        video_src = video_content
+        # Decode the base64 video content
+        content_type, content_string = video_content.split(',')
+        video_data = base64.b64decode(content_string)
+
+        # Upload to Google Cloud Storage
+        public_url = upload_to_gcs(filename, video_data)
+
+        # Return the public URL to display the video
+        video_src = public_url
     else:
         video_src = ''
 

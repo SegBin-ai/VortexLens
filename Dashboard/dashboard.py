@@ -22,7 +22,7 @@ def parse_obj_file(file_path):
     return vertices, faces
 
 # Path to the .obj file
-obj_file_path = r'C:\Users\Aaditya Voruganti\Desktop\VortexLens\Dashboard\model.obj'
+obj_file_path = '/Users/aadityavoruganti/Desktop/Aadi/TerraVortex/VortexLens/Dashboard/model.obj'
 vertices, faces = parse_obj_file(obj_file_path)
 x, y, z = zip(*vertices)
 i, j, k = zip(*[(face[0], face[1], face[2]) for face in faces])
