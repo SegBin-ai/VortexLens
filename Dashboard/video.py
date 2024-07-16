@@ -1,17 +1,23 @@
-from utils.bluetooth import get_usb_bluetooth_devices, get_bluetooth_devices, get_usb_devices
+
 from dash import Dash, dcc, html, Input, Output, State, exceptions
 import dash_bootstrap_components as dbc
 import base64
+from utils.bluetooth import get_usb_bluetooth_devices, get_bluetooth_devices, get_usb_devices
 from utils.styles import styles
-from utils.google_cloud import upload_to_gcs, fetch_videos_metadata
+from utils.google_cloud import upload_to_gcs, fetch_videos_metadata, get_all_structures
 
 # Initialize the Dash app with suppress_callback_exceptions
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+
+# Initialize list of structures
+initial_structures = get_all_structures()
 
 # Layout of the Dash app
 app.layout = dbc.Container([
     dcc.Store(id='video-url-store'),
     dcc.Store(id='device-status-store', data={'status': 'disconnected', 'name': ''}),
+    dcc.Store(id='structure-list-store', data=initial_structures),
+    dcc.Store(id='selected-structure-store'),
     dbc.Tabs([
         dbc.Tab(label='Upload', tab_id='upload-tab'),
         dbc.Tab(label='Gallery', tab_id='gallery-tab'),
@@ -38,6 +44,17 @@ upload_layout = html.Div([
                 accept=".mp4,.mov"
             ),
             html.Div(id='output-filename', style={'margin-top': '10px'}),
+            dbc.Label("Select Structure"),
+            dcc.Dropdown(
+                id='structure-dropdown',
+                options=[{'label': s, 'value': s} for s in initial_structures] + [{'label': 'Create New', 'value': 'create-new'}],
+                value='create-new'
+            ),
+            html.Div(id='new-structure-container', children=[
+                dbc.Label("New Structure Name"),
+                dbc.Input(id='new-structure-name', type='text', placeholder='Enter new structure name', style=styles['input']),
+                dbc.Button('Add Structure', id='add-structure-button', style=styles['button'])
+            ], style={'display': 'none'}),
             dbc.Label("Title"),
             dbc.Input(id='video-title', type='text', placeholder='Enter video title', style=styles['input']),
             dbc.Label("Description"),
@@ -107,9 +124,10 @@ def update_filename(filename):
     [State('video-title', 'value'),
      State('video-description', 'value'),
      State('upload-video', 'contents'),
-     State('upload-video', 'filename')]
+     State('upload-video', 'filename'),
+     State('structure-dropdown', 'value')]
 )
-def update_output(n_clicks, title, description, video_content, filename):
+def update_output(n_clicks, title, description, video_content, filename, selected_structure):
     if n_clicks is None:
         raise exceptions.PreventUpdate
 
@@ -118,7 +136,7 @@ def update_output(n_clicks, title, description, video_content, filename):
         video_data = base64.b64decode(content_string)
 
         # Upload to GCS and get public URL
-        public_url = upload_to_gcs(filename, video_data, title, description)
+        public_url = upload_to_gcs(filename, video_data, title, description, selected_structure)
 
         # Debugging output
         print(f"Uploaded video URL: {public_url}")
@@ -174,6 +192,7 @@ def update_gallery(active_tab):
                 html.Div([
                     html.H4(video['title']),
                     html.P(video['description']),
+                    html.P(video['structure']),
                     dbc.Button('Upload', id=f'upload-button-{video_id}', style=styles['button'])
                 ], style=styles['metadata'])
             ], style=styles['card'])
@@ -204,6 +223,27 @@ def update_device_status(device_status):
     if device_status['status'] == 'connected':
         return f"Device: {device_status['name']} (Health: {device_status['health']})", {'color': 'green'}
     return "Device: Disconnected", {'color': 'red'}
+
+@app.callback(
+    [Output('structure-dropdown', 'options'),
+     Output('structure-dropdown', 'value'),
+     Output('new-structure-container', 'style'),
+     Output('structure-list-store', 'data')],
+    [Input('add-structure-button', 'n_clicks'),
+     Input('structure-dropdown', 'value')],
+    [State('new-structure-name', 'value'),
+     State('structure-list-store', 'data')]
+)
+def update_structures(n_clicks, selected_value, new_structure_name, current_structures):
+    if n_clicks and new_structure_name:
+        if new_structure_name not in current_structures:
+            current_structures.append(new_structure_name)
+        return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], new_structure_name, {'display': 'none'}, current_structures
+    
+    if selected_value == 'create-new':
+        return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], 'create-new', {'display': 'block'}, current_structures
+    
+    return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], selected_value, {'display': 'none'}, current_structures
 
 if __name__ == '__main__':
     app.run_server(debug=True)

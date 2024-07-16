@@ -33,6 +33,8 @@ styles = {
         'width': '100%',
         'marginTop': '20px'
     },
+    'dropdown': {'width': '100%', 'marginBottom': '10px'},  # Added this line
+
     'input': {
         'backgroundColor': secondary_color,
         'color': accent_color,
