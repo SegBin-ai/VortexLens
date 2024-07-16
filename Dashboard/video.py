@@ -11,13 +11,15 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callb
 # Layout of the Dash app
 app.layout = dbc.Container([
     dcc.Store(id='video-url-store'),
+    dcc.Store(id='device-status-store', data={'status': 'disconnected', 'name': ''}),
     dbc.Tabs([
         dbc.Tab(label='Upload', tab_id='upload-tab'),
         dbc.Tab(label='Gallery', tab_id='gallery-tab'),
         dbc.Tab(label='Devices', tab_id='devices-tab')
     ], id='tabs', active_tab='upload-tab'),
     
-    html.Div(id='tab-content', style=styles['container'])
+    html.Div(id='tab-content', style=styles['container']),
+    html.Div(id='device-status', style={'position': 'fixed', 'bottom': '10px', 'right': '10px'})
 ])
 
 upload_layout = html.Div([
@@ -115,7 +117,11 @@ def update_output(n_clicks, title, description, video_content, filename):
         content_type, content_string = video_content.split(',')
         video_data = base64.b64decode(content_string)
 
+        # Upload to GCS and get public URL
         public_url = upload_to_gcs(filename, video_data, title, description)
+
+        # Debugging output
+        print(f"Uploaded video URL: {public_url}")
 
         video_src = public_url
     else:
@@ -131,6 +137,9 @@ def update_video_player(video_url):
     if not video_url:
         raise exceptions.PreventUpdate
     
+    # Debugging output
+    print(f"Video URL for player: {video_url}")
+
     return html.Div([
         html.Video(
             controls=True,
@@ -153,7 +162,8 @@ def update_gallery(active_tab):
         return html.P("No videos available.")
 
     gallery_items = []
-    for video in videos:
+    for index, video in enumerate(videos):
+        video_id = video.get('id', index)  # Use 'id' if available, otherwise use index as id
         gallery_items.append(
             dbc.Card([
                 html.Video(
@@ -163,7 +173,8 @@ def update_gallery(active_tab):
                 ),
                 html.Div([
                     html.H4(video['title']),
-                    html.P(video['description'])
+                    html.P(video['description']),
+                    dbc.Button('Upload', id=f'upload-button-{video_id}', style=styles['button'])
                 ], style=styles['metadata'])
             ], style=styles['card'])
         )
@@ -171,7 +182,8 @@ def update_gallery(active_tab):
     return gallery_items
 
 @app.callback(
-    Output('connected-text', 'children'),
+    [Output('connected-text', 'children'),
+     Output('device-status-store', 'data')],
     Input('connect-button', 'n_clicks'),
     State('device-dropdown', 'value')
 )
@@ -179,8 +191,19 @@ def connect_device(n_clicks, selected_device):
     if n_clicks is None:
         raise exceptions.PreventUpdate
     if selected_device:
-        return f"Connected to {selected_device}"
-    return ''
+        device_status = {'status': 'connected', 'name': selected_device, 'health': 'good'}  # Example status
+        return f"Connected to {selected_device}", device_status
+    return '', {'status': 'disconnected', 'name': ''}
+
+@app.callback(
+    Output('device-status', 'children'),
+    Output('device-status', 'style'),
+    Input('device-status-store', 'data')
+)
+def update_device_status(device_status):
+    if device_status['status'] == 'connected':
+        return f"Device: {device_status['name']} (Health: {device_status['health']})", {'color': 'green'}
+    return "Device: Disconnected", {'color': 'red'}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
