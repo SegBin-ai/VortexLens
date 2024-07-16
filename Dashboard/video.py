@@ -1,12 +1,13 @@
-from dash import Dash, dcc, html
+import usb.core
+import usb.util
+from bleak import BleakScanner
+from dash import Dash, dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
 import base64
-import os
 from google.cloud import storage
+import asyncio
 
-# Initialize the Dash app
+# Initialize the Dash app with suppress_callback_exceptions
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 # Define styles
@@ -76,6 +77,11 @@ styles = {
     },
     'metadata': {
         'padding': '10px'
+    },
+    'connected-text': {
+        'color': accent_color,
+        'fontSize': '20px',
+        'marginTop': '10px'
     }
 }
 
@@ -114,11 +120,33 @@ def fetch_videos_metadata():
             videos.append(video_info)
     return videos
 
+# Function to get actual USB and Bluetooth devices
+async def get_bluetooth_devices():
+    devices = await BleakScanner.discover()
+    return [{'label': f'Bluetooth Device {device.name} ({device.address})', 'value': f'bt_{device.address}'} for device in devices]
+
+def get_usb_devices():
+    try:
+        devices = []
+        usb_devices = usb.core.find(find_all=True)
+        for device in usb_devices:
+            devices.append({'label': f'USB Device {device.idVendor}:{device.idProduct}', 'value': f'usb_{device.idVendor}_{device.idProduct}'})
+        return devices
+    except usb.core.NoBackendError:
+        return [{'label': 'No USB Backend Available', 'value': 'no_backend'}]
+
+def get_usb_bluetooth_devices():
+    usb_devices = get_usb_devices()
+    bluetooth_devices = asyncio.run(get_bluetooth_devices())
+    return usb_devices + bluetooth_devices
+
 # Layout of the Dash app
 app.layout = dbc.Container([
+    dcc.Store(id='video-url-store'),
     dbc.Tabs([
         dbc.Tab(label='Upload', tab_id='upload-tab'),
-        dbc.Tab(label='Gallery', tab_id='gallery-tab')
+        dbc.Tab(label='Gallery', tab_id='gallery-tab'),
+        dbc.Tab(label='Devices', tab_id='devices-tab')
     ], id='tabs', active_tab='upload-tab'),
     
     html.Div(id='tab-content', style=styles['container'])
@@ -151,7 +179,7 @@ upload_layout = html.Div([
         dbc.Col([
             html.H3(id='output-title', className="mt-3"),
             html.P(id='output-description'),
-            html.Video(id='output-video', controls=True, style=styles['video'])
+            html.Div(id='video-player-container', style=styles['video'])
         ])
     ])
 ])
@@ -159,6 +187,23 @@ upload_layout = html.Div([
 gallery_layout = html.Div([
     html.H1("Video Gallery", style=styles['header']),
     html.Div(id='gallery-content', style=styles['gallery'])
+])
+
+devices_layout = html.Div([
+    dbc.Row([
+        dbc.Col(html.H1("Devices", style=styles['header']))
+    ]),
+    dbc.Row([
+        dbc.Col([
+            dcc.Dropdown(
+                id='device-dropdown',
+                options=get_usb_bluetooth_devices(),
+                placeholder="Select a device"
+            ),
+            dbc.Button('Connect', id='connect-button', style=styles['button']),
+            html.Div(id='connected-text', style=styles['connected-text'])
+        ], width=6)
+    ])
 ])
 
 @app.callback(
@@ -170,6 +215,8 @@ def render_tab_content(active_tab):
         return upload_layout
     elif active_tab == 'gallery-tab':
         return gallery_layout
+    elif active_tab == 'devices-tab':
+        return devices_layout
 
 # Callback to update filename immediately after file is uploaded
 @app.callback(
@@ -185,7 +232,7 @@ def update_filename(filename):
 @app.callback(
     [Output('output-title', 'children'),
      Output('output-description', 'children'),
-     Output('output-video', 'src')],
+     Output('video-url-store', 'data')],
     [Input('submit-button', 'n_clicks')],
     [State('video-title', 'value'),
      State('video-description', 'value'),
@@ -211,6 +258,23 @@ def update_output(n_clicks, title, description, video_content, filename):
 
     return title, description, video_src
 
+# Callback to update video player
+@app.callback(
+    Output('video-player-container', 'children'),
+    Input('video-url-store', 'data')
+)
+def update_video_player(video_url):
+    if not video_url:
+        raise PreventUpdate
+    
+    return html.Div([
+        html.Video(
+            controls=True,
+            src=video_url,
+            style={'width': '100%'}
+        )
+    ])
+
 @app.callback(
     Output('gallery-content', 'children'),
     Input('tabs', 'active_tab')
@@ -228,7 +292,11 @@ def update_gallery(active_tab):
     for video in videos:
         gallery_items.append(
             dbc.Card([
-                html.Video(src=video['url'], controls=True, style=styles['thumbnail']),
+                html.Video(
+                    controls=True,
+                    src=video['url'],
+                    style=styles['thumbnail']
+                ),
                 html.Div([
                     html.H4(video['title']),
                     html.P(video['description'])
@@ -237,6 +305,18 @@ def update_gallery(active_tab):
         )
 
     return gallery_items
+
+@app.callback(
+    Output('connected-text', 'children'),
+    Input('connect-button', 'n_clicks'),
+    State('device-dropdown', 'value')
+)
+def connect_device(n_clicks, selected_device):
+    if n_clicks is None:
+        raise PreventUpdate
+    if selected_device:
+        return f"Connected to {selected_device}"
+    return ''
 
 # Run the app
 if __name__ == '__main__':
