@@ -11,3 +11,4 @@ pip install tensorflow==2.15.0
 pip install keras==2.15.0
 pip install opencv-python-headless
 pip install ultralytics
+Install Google Cloud CLI: https://cloud.google.com/sdk/docs/install-sdk
