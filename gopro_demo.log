@@ -1,0 +1,259 @@
+   MainThread:14:45:30.228 util.py                                   210 DEBUG    | Send cmd --> netsh wlan show interfaces
+   MainThread:14:45:30.295 util.py                                   216 DEBUG    | Receive response --> 
+There is 1 interface on the system: 
+
+    Name                   : Wi-Fi 2
+    Description            : Realtek 8821CU Wireless LAN 802.11ac USB NIC
+    GUID                   : b9d164e0-ed6a-4a9e-8ce5-bf7de7efb5ff
+    Physical address       : 50:91:e3:21:e7:d6
+    Interface type         : Primary
+    State                  : disconnected
+    Radio status           : Hardware On
+                             Software Off
+
+    Hosted network status  : Not available
+
+
+   MainThread:14:45:30.295 wireless.py                                97 DEBUG    | Wifi setup. Using [WifiCli] driver::[Wi-Fi 2] interface
+   MainThread:14:45:30.295 bleak_wrapper.py                          120 INFO     | Scanning for GoPro [A-Z0-9]{4} bluetooth devices...
+   MainThread:14:45:30.577 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:31.165 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:31.413 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:31.764 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:31.764 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:32.121 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:32.228 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:32.943 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:33.062 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:33.062 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:33.521 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:33.521 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:33.533 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:33.767 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:33.984 scanner.py                                109 DEBUG    | Received 45:B0:60:6C:23:5D: .
+   MainThread:14:45:34.001 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:34.001 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:34.365 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:34.479 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:34.601 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:34.709 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:35.183 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:35.299 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:35.299 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:35.428 scanner.py                                109 DEBUG    | Received 45:B0:60:6C:23:5D: .
+   MainThread:14:45:35.767 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:35.780 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:35.894 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:35.894 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:35.894 scanner.py                                109 DEBUG    | Received 26:22:BC:D0:EE:1E: .
+   MainThread:14:45:36.003 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:36.484 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:36.594 scanner.py                                109 DEBUG    | Received C0:95:6D:77:F5:D0: .
+   MainThread:14:45:36.848 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:37.069 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:37.069 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:37.546 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:37.546 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:37.788 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:37.899 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:37.901 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:38.148 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:38.259 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:38.830 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:38.830 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:38.846 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:39.201 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:39.319 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:39.319 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:39.319 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:45:39.319 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:39.799 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:39.801 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:39.801 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:39.903 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:40.251 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:40.266 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:40.314 scanner.py                                215 DEBUG    | 9 devices found. Watcher status: <BluetoothLEAdvertisementWatcherStatus.STOPPED: 3>.
+   MainThread:14:45:40.314 client.py                                  85 WARNING  | Failed to find a device in 10 seconds. Retrying #1
+   MainThread:14:45:40.314 bleak_wrapper.py                          120 INFO     | Scanning for GoPro [A-Z0-9]{4} bluetooth devices...
+   MainThread:14:45:40.638 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:41.002 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:41.355 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:41.452 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:42.054 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:42.171 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:42.410 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:42.531 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:42.531 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:42.886 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:43.239 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:43.352 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:43.709 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:44.304 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:44.414 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:44.769 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:44.769 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:45.131 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:45.253 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:45.253 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:45.603 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:46.075 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:46.174 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:46.190 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:45:46.190 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:45:46.538 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:46.538 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:46.905 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:46.905 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:45:47.015 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:47.015 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:47.492 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:47.492 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:47.609 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:47.851 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:47.943 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:47.960 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:47.960 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:48.416 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:48.670 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:49.246 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:49.261 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:49.263 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:49.613 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:49.736 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:49.736 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:49.863 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:49.863 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:50.078 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:50.094 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:50.210 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:50.326 scanner.py                                215 DEBUG    | 9 devices found. Watcher status: <BluetoothLEAdvertisementWatcherStatus.STOPPED: 3>.
+   MainThread:14:45:50.326 client.py                                  85 WARNING  | Failed to find a device in 10 seconds. Retrying #2
+   MainThread:14:45:50.326 bleak_wrapper.py                          120 INFO     | Scanning for GoPro [A-Z0-9]{4} bluetooth devices...
+   MainThread:14:45:50.462 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:50.462 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:50.709 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:50.711 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:50.825 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:51.182 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:51.182 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:45:51.763 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:52.002 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:52.112 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:52.472 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:52.472 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:52.594 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:52.594 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:52.594 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:52.594 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:52.704 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:52.947 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:52.947 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:52.947 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:53.292 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:53.308 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:53.755 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:53.893 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:54.715 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:54.719 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:54.719 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:45:55.066 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:55.066 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:55.548 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:55.664 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:56.142 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:56.142 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:56.262 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:56.474 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:56.726 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:56.738 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:45:56.968 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:56.968 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:57.322 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:57.551 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:57.558 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:45:58.272 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:45:58.383 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:58.482 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:45:58.623 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:58.623 scanner.py                                109 DEBUG    | Received 67:36:11:B6:40:41: .
+   MainThread:14:45:58.969 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:45:58.969 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:45:59.201 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:45:59.201 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:45:59.201 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:45:59.324 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:00.030 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:00.265 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:00.335 scanner.py                                215 DEBUG    | 8 devices found. Watcher status: <BluetoothLEAdvertisementWatcherStatus.STOPPED: 3>.
+   MainThread:14:46:00.335 client.py                                  85 WARNING  | Failed to find a device in 10 seconds. Retrying #3
+   MainThread:14:46:00.335 bleak_wrapper.py                          120 INFO     | Scanning for GoPro [A-Z0-9]{4} bluetooth devices...
+   MainThread:14:46:00.388 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:00.388 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:46:00.514 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:46:00.514 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:46:00.654 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:00.654 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:00.754 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:00.869 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:46:01.001 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:01.110 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:01.954 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:02.058 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:02.413 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:46:02.413 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:02.423 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:02.540 scanner.py                                109 DEBUG    | Received DC:B7:13:BE:A5:8C: .
+   MainThread:14:46:02.909 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:02.922 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:02.926 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:03.248 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:03.948 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:03.959 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:04.071 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:04.181 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:04.181 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:04.668 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:04.672 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:04.783 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:46:04.893 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:05.007 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:05.239 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:05.239 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:46:05.724 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:06.678 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:06.895 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:06.909 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:06.909 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:46:06.909 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:46:06.909 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:07.020 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:07.261 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:07.261 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:46:07.377 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:07.858 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:07.858 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:07.858 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:07.967 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:07.967 scanner.py                                109 DEBUG    | Received 5C:12:64:76:86:3C: .
+   MainThread:14:46:08.677 scanner.py                                109 DEBUG    | Received 70:80:46:4E:B9:D1: .
+   MainThread:14:46:08.677 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:08.677 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:46:08.793 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:08.911 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:09.267 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:09.378 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:46:09.378 scanner.py                                109 DEBUG    | Received 4A:52:25:5B:75:87: .
+   MainThread:14:46:09.620 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: .
+   MainThread:14:46:09.623 scanner.py                                109 DEBUG    | Received 76:B2:70:D7:BB:BB: LE-Acrux.
+   MainThread:14:46:09.745 scanner.py                                109 DEBUG    | Received 09:F6:42:95:1B:77: .
+   MainThread:14:46:10.103 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: .
+   MainThread:14:46:10.104 scanner.py                                109 DEBUG    | Received 23:01:01:04:A3:09: KS03~04A309.
+   MainThread:14:46:10.330 scanner.py                                109 DEBUG    | Received 7B:92:6E:D9:DA:A7: .
+   MainThread:14:46:10.332 scanner.py                                215 DEBUG    | 8 devices found. Watcher status: <BluetoothLEAdvertisementWatcherStatus.STOPPED: 3>.
+   MainThread:14:46:10.332 client.py                                  85 WARNING  | Failed to find a device in 10 seconds. Retrying #4
+   MainThread:14:46:10.333 gopro_wireless.py                         316 ERROR    | Error while opening: A scan timed out without finding a device
+   MainThread:14:46:10.335 util.py                                   210 DEBUG    | Send cmd --> netsh wlan disconnect interface="Wi-Fi 2"
+   MainThread:14:46:10.393 util.py                                   216 DEBUG    | Receive response --> 
+
+   MainThread:14:46:10.393 photo.py                                   51 ERROR    | FailedToFindDevice('A scan timed out without finding a device')

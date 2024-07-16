@@ -1,144 +1,12 @@
-import usb.core
-import usb.util
-from bleak import BleakScanner
-from dash import Dash, dcc, html, Input, Output, State
+from utils.bluetooth import get_usb_bluetooth_devices, get_bluetooth_devices, get_usb_devices
+from dash import Dash, dcc, html, Input, Output, State, exceptions
 import dash_bootstrap_components as dbc
 import base64
-from google.cloud import storage
-import asyncio
+from utils.styles import styles
+from utils.google_cloud import upload_to_gcs, fetch_videos_metadata
 
 # Initialize the Dash app with suppress_callback_exceptions
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-
-# Define styles
-secondary_color = '#DC143C'  # Crimson
-accent_color = '#000080'  # Navy Blue
-primary_color = '#FFFFFF'  # White
-
-styles = {
-    'container': {
-        'backgroundColor': primary_color,
-        'color': accent_color,
-        'padding': '20px'
-    },
-    'header': {
-        'textAlign': 'center',
-        'color': secondary_color,
-    },
-    'upload': {
-        'width': '100%',
-        'height': '60px',
-        'lineHeight': '60px',
-        'borderWidth': '1px',
-        'borderStyle': 'dashed',
-        'borderRadius': '5px',
-        'textAlign': 'center',
-        'margin': '10px',
-        'backgroundColor': secondary_color,
-        'color': accent_color,
-    },
-    'button': {
-        'backgroundColor': secondary_color,
-        'borderColor': secondary_color,
-        'color': accent_color,
-        'marginTop': '20px'
-    },
-    'video': {
-        'width': '100%',
-        'marginTop': '20px'
-    },
-    'input': {
-        'backgroundColor': secondary_color,
-        'color': accent_color,
-        'borderColor': secondary_color,
-        'marginBottom': '10px'
-    },
-    'textarea': {
-        'backgroundColor': secondary_color,
-        'color': accent_color,
-        'borderColor': secondary_color,
-        'marginBottom': '10px'
-    },
-    'gallery': {
-        'display': 'flex',
-        'flexWrap': 'wrap',
-        'justifyContent': 'space-around',
-        'paddingTop': '20px'
-    },
-    'card': {
-        'width': '300px',
-        'margin': '10px',
-        'border': f'1px solid {secondary_color}',
-        'borderRadius': '5px',
-        'boxShadow': '2px 2px 5px rgba(0,0,0,0.1)'
-    },
-    'thumbnail': {
-        'width': '100%'
-    },
-    'metadata': {
-        'padding': '10px'
-    },
-    'connected-text': {
-        'color': accent_color,
-        'fontSize': '20px',
-        'marginTop': '10px'
-    }
-}
-
-# Google Cloud Storage setup
-bucket_name = 'factory-work'  # Replace with your bucket name
-
-def upload_to_gcs(file_name, file_content, title, description):
-    client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(file_name)
-    
-    metadata = {
-        'title': title,
-        'description': description
-    }
-    
-    blob.metadata = metadata
-    content_type = 'video/mp4' if file_name.endswith('.mp4') else 'video/quicktime'
-    blob.upload_from_string(file_content, content_type=content_type)
-    return blob.public_url
-
-def fetch_videos_metadata():
-    client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blobs = bucket.list_blobs()
-
-    videos = []
-    for blob in blobs:
-        if blob.metadata and 'title' in blob.metadata and 'description' in blob.metadata:
-            video_info = {
-                'url': blob.public_url,
-                'title': blob.metadata['title'],
-                'description': blob.metadata['description'],
-                'content_type': blob.content_type
-            }
-            videos.append(video_info)
-    return videos
-
-# Function to get actual USB and Bluetooth devices
-async def get_bluetooth_devices():
-    devices = await BleakScanner.discover()
-    return [{'label': f'Bluetooth Device {device.name} ({device.address})', 'value': f'bt_{device.address}'} for device in devices]
-
-def get_usb_devices():
-    try:
-        devices = []
-        usb_devices = usb.core.find(find_all=True)
-        for device in usb_devices:
-            devices.append({'label': f'USB Device {device.idVendor}:{device.idProduct}', 'value': f'usb_{device.idVendor}_{device.idProduct}'})
-        return devices
-    except usb.core.NoBackendError:
-        return [{'label': 'No USB Backend Available', 'value': 'no_backend'}]
-
-def get_usb_bluetooth_devices():
-    usb_devices = get_usb_devices()
-    bluetooth_devices = asyncio.run(get_bluetooth_devices())
-    return usb_devices + bluetooth_devices
 
 # Layout of the Dash app
 app.layout = dbc.Container([
@@ -241,31 +109,27 @@ def update_filename(filename):
 )
 def update_output(n_clicks, title, description, video_content, filename):
     if n_clicks is None:
-        raise PreventUpdate
+        raise exceptions.PreventUpdate
 
     if video_content is not None:
-        # Decode the base64 video content
         content_type, content_string = video_content.split(',')
         video_data = base64.b64decode(content_string)
 
-        # Upload to Google Cloud Storage
         public_url = upload_to_gcs(filename, video_data, title, description)
 
-        # Return the public URL to display the video
         video_src = public_url
     else:
         video_src = ''
 
     return title, description, video_src
 
-# Callback to update video player
 @app.callback(
     Output('video-player-container', 'children'),
     Input('video-url-store', 'data')
 )
 def update_video_player(video_url):
     if not video_url:
-        raise PreventUpdate
+        raise exceptions.PreventUpdate
     
     return html.Div([
         html.Video(
@@ -281,7 +145,7 @@ def update_video_player(video_url):
 )
 def update_gallery(active_tab):
     if active_tab != 'gallery-tab':
-        raise PreventUpdate
+        raise exceptions.PreventUpdate
 
     videos = fetch_videos_metadata()
     
@@ -313,11 +177,10 @@ def update_gallery(active_tab):
 )
 def connect_device(n_clicks, selected_device):
     if n_clicks is None:
-        raise PreventUpdate
+        raise exceptions.PreventUpdate
     if selected_device:
         return f"Connected to {selected_device}"
     return ''
 
-# Run the app
 if __name__ == '__main__':
     app.run_server(debug=True)
