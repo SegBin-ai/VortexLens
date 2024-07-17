@@ -1,15 +1,15 @@
-
 from dash import Dash, dcc, html, Input, Output, State, exceptions
 import dash_bootstrap_components as dbc
-import base64
-from utils.bluetooth import get_usb_bluetooth_devices, get_bluetooth_devices, get_usb_devices
 from utils.styles import styles
-from utils.google_cloud import upload_to_gcs, fetch_videos_metadata, get_all_structures
+from layouts.upload import upload_layout, register_upload_callbacks
+from layouts.gallery import gallery_layout, register_gallery_callbacks
+from layouts.devices import devices_layout, register_devices_callbacks
+from utils.google_cloud import get_all_structures
 
 # Initialize the Dash app with suppress_callback_exceptions
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
-# Initialize list of structures
+# Fetch initial list of structures
 initial_structures = get_all_structures()
 
 # Layout of the Dash app
@@ -18,6 +18,7 @@ app.layout = dbc.Container([
     dcc.Store(id='device-status-store', data={'status': 'disconnected', 'name': ''}),
     dcc.Store(id='structure-list-store', data=initial_structures),
     dcc.Store(id='selected-structure-store'),
+    dcc.Store(id='folder-path-store', data=''),  # Store the current folder path
     dbc.Tabs([
         dbc.Tab(label='Upload', tab_id='upload-tab'),
         dbc.Tab(label='Gallery', tab_id='gallery-tab'),
@@ -26,71 +27,6 @@ app.layout = dbc.Container([
     
     html.Div(id='tab-content', style=styles['container']),
     html.Div(id='device-status', style={'position': 'fixed', 'bottom': '10px', 'right': '10px'})
-])
-
-upload_layout = html.Div([
-    dbc.Row([
-        dbc.Col(html.H1("TerraVortex", style=styles['header'])),
-        dbc.Col(html.Img(src='https://raw.githubusercontent.com/SegBin-ai/VortexLens/windows-edition/Dashboard/Logo.png', style={'width': '150px', 'height': '150px'}), width="auto")
-    ]),
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Upload Video"),
-            dcc.Upload(
-                id='upload-video',
-                children=html.Div(['Drag and Drop or ', html.A('Select Files')]),
-                style=styles['upload'],
-                multiple=False,
-                accept=".mp4,.mov"
-            ),
-            html.Div(id='output-filename', style={'margin-top': '10px'}),
-            dbc.Label("Select Structure"),
-            dcc.Dropdown(
-                id='structure-dropdown',
-                options=[{'label': s, 'value': s} for s in initial_structures] + [{'label': 'Create New', 'value': 'create-new'}],
-                value='create-new'
-            ),
-            html.Div(id='new-structure-container', children=[
-                dbc.Label("New Structure Name"),
-                dbc.Input(id='new-structure-name', type='text', placeholder='Enter new structure name', style=styles['input']),
-                dbc.Button('Add Structure', id='add-structure-button', style=styles['button'])
-            ], style={'display': 'none'}),
-            dbc.Label("Title"),
-            dbc.Input(id='video-title', type='text', placeholder='Enter video title', style=styles['input']),
-            dbc.Label("Description"),
-            dbc.Textarea(id='video-description', placeholder='Enter video description', style=styles['textarea']),
-            dbc.Button('Submit', id='submit-button', style=styles['button'])
-        ], width=6)
-    ]),
-    dbc.Row([
-        dbc.Col([
-            html.H3(id='output-title', className="mt-3"),
-            html.P(id='output-description'),
-            html.Div(id='video-player-container', style=styles['video'])
-        ])
-    ])
-])
-
-gallery_layout = html.Div([
-    html.H1("Video Gallery", style=styles['header']),
-    html.Div(id='gallery-content', style=styles['gallery'])
-])
-
-devices_layout = html.Div([
-    dbc.Row([
-        dbc.Col(html.H1("Devices", style=styles['header']))
-    ]),
-    dbc.Row([
-        dbc.Col([
-            dcc.Dropdown(
-                id='device-dropdown',
-                options=get_usb_bluetooth_devices(),
-                placeholder="Select a device"
-            ),
-            dbc.Button('Connect', id='connect-button', style=styles['button']),
-            html.Div(id='connected-text', style=styles['connected-text'])
-        ], width=6)
-    ])
 ])
 
 @app.callback(
@@ -105,145 +41,10 @@ def render_tab_content(active_tab):
     elif active_tab == 'devices-tab':
         return devices_layout
 
-# Callback to update filename immediately after file is uploaded
-@app.callback(
-    Output('output-filename', 'children'),
-    Input('upload-video', 'filename')
-)
-def update_filename(filename):
-    if filename is not None:
-        return f"Uploaded file: {filename}"
-    return 'No file uploaded.'
-
-# Callback to handle video upload and display title, description, and video
-@app.callback(
-    [Output('output-title', 'children'),
-     Output('output-description', 'children'),
-     Output('video-url-store', 'data')],
-    [Input('submit-button', 'n_clicks')],
-    [State('video-title', 'value'),
-     State('video-description', 'value'),
-     State('upload-video', 'contents'),
-     State('upload-video', 'filename'),
-     State('structure-dropdown', 'value')]
-)
-def update_output(n_clicks, title, description, video_content, filename, selected_structure):
-    if n_clicks is None:
-        raise exceptions.PreventUpdate
-
-    if video_content is not None:
-        content_type, content_string = video_content.split(',')
-        video_data = base64.b64decode(content_string)
-
-        # Upload to GCS and get public URL
-        public_url = upload_to_gcs(filename, video_data, title, description, selected_structure)
-
-        # Debugging output
-        print(f"Uploaded video URL: {public_url}")
-
-        video_src = public_url
-    else:
-        video_src = ''
-
-    return title, description, video_src
-
-@app.callback(
-    Output('video-player-container', 'children'),
-    Input('video-url-store', 'data')
-)
-def update_video_player(video_url):
-    if not video_url:
-        raise exceptions.PreventUpdate
-    
-    # Debugging output
-    print(f"Video URL for player: {video_url}")
-
-    return html.Div([
-        html.Video(
-            controls=True,
-            src=video_url,
-            style={'width': '100%'}
-        )
-    ])
-
-@app.callback(
-    Output('gallery-content', 'children'),
-    Input('tabs', 'active_tab')
-)
-def update_gallery(active_tab):
-    if active_tab != 'gallery-tab':
-        raise exceptions.PreventUpdate
-
-    videos = fetch_videos_metadata()
-    
-    if not videos:
-        return html.P("No videos available.")
-
-    gallery_items = []
-    for index, video in enumerate(videos):
-        video_id = video.get('id', index)  # Use 'id' if available, otherwise use index as id
-        gallery_items.append(
-            dbc.Card([
-                html.Video(
-                    controls=True,
-                    src=video['url'],
-                    style=styles['thumbnail']
-                ),
-                html.Div([
-                    html.H4(video['title']),
-                    html.P(video['description']),
-                    html.P(video['structure']),
-                    dbc.Button('Upload', id=f'upload-button-{video_id}', style=styles['button'])
-                ], style=styles['metadata'])
-            ], style=styles['card'])
-        )
-
-    return gallery_items
-
-@app.callback(
-    [Output('connected-text', 'children'),
-     Output('device-status-store', 'data')],
-    Input('connect-button', 'n_clicks'),
-    State('device-dropdown', 'value')
-)
-def connect_device(n_clicks, selected_device):
-    if n_clicks is None:
-        raise exceptions.PreventUpdate
-    if selected_device:
-        device_status = {'status': 'connected', 'name': selected_device, 'health': 'good'}  # Example status
-        return f"Connected to {selected_device}", device_status
-    return '', {'status': 'disconnected', 'name': ''}
-
-@app.callback(
-    Output('device-status', 'children'),
-    Output('device-status', 'style'),
-    Input('device-status-store', 'data')
-)
-def update_device_status(device_status):
-    if device_status['status'] == 'connected':
-        return f"Device: {device_status['name']} (Health: {device_status['health']})", {'color': 'green'}
-    return "Device: Disconnected", {'color': 'red'}
-
-@app.callback(
-    [Output('structure-dropdown', 'options'),
-     Output('structure-dropdown', 'value'),
-     Output('new-structure-container', 'style'),
-     Output('structure-list-store', 'data')],
-    [Input('add-structure-button', 'n_clicks'),
-     Input('structure-dropdown', 'value')],
-    [State('new-structure-name', 'value'),
-     State('structure-list-store', 'data')]
-)
-def update_structures(n_clicks, selected_value, new_structure_name, current_structures):
-    if n_clicks and new_structure_name:
-        if new_structure_name not in current_structures:
-            current_structures.append(new_structure_name)
-        return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], new_structure_name, {'display': 'none'}, current_structures
-    
-    if selected_value == 'create-new':
-        return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], 'create-new', {'display': 'block'}, current_structures
-    
-    return [{'label': s, 'value': s} for s in current_structures] + [{'label': 'Create New', 'value': 'create-new'}], selected_value, {'display': 'none'}, current_structures
+# Register callbacks from other modules
+register_upload_callbacks(app)
+register_gallery_callbacks(app)
+register_devices_callbacks(app)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
