@@ -15,7 +15,7 @@ IMAGENET_STD = [0.229, 0.224, 0.225]   # RGB standard deviation
 IMAGE_SIZE = (71, 71)
 MIN_CONFIDENCE = 0.2
 
-model_path = 'screw_head_detector-2.h5'
+model_path = 'C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\screw_head_detector-2.h5'
 
 def model_init():
     
@@ -35,7 +35,7 @@ def preprocess_proposal(region, image_size=IMAGE_SIZE):
 
 
 def yolo_model_init():
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best_new.pt')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:\\Users\\Aaditya Voruganti\\Desktop\VortexLens\\screw_exploration\\Blob_detection\\best_new.pt')
     model.eval()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)

@@ -11,6 +11,12 @@ rectangles = []
 drawing = False
 ix, iy = -1, -1
 
+import platform
+if platform.system() == 'Windows':
+    import pathlib
+    temp = pathlib.PosixPath
+    pathlib.PosixPath = pathlib.WindowsPath
+
 def draw_rectangle(event, x, y, flags, param):
     global ix, iy, drawing, rectangles
 
@@ -182,9 +188,10 @@ def main(reference_image_path, video_path=0, fps_limit=30, output_file="matches_
     frame_count_interval = 200
     display_duration = 4
     # frame_count_intervals = [330, 630, 870, 1320, 1650]
-    frame_count_intervals = [180, 570, 840]
+    # frame_count_intervals = [180, 570, 840]
     
     #commented code was for demo video purposes
+
     screws_placed = [0, 2, 3]
     index = 0
     while cap.isOpened():
@@ -201,8 +208,8 @@ def main(reference_image_path, video_path=0, fps_limit=30, output_file="matches_
                 out.write(frame)
             continue
         
-        # if frame_count % frame_count_interval == 0:
-        if frame_count in frame_count_intervals:
+        if frame_count % frame_count_interval == 0:
+        #if frame_count in frame_count_intervals:
             #The commented code was for demo video purposes
             # screw_states[screws_placed[index]] = True
             # index += 1
@@ -265,7 +272,8 @@ def main(reference_image_path, video_path=0, fps_limit=30, output_file="matches_
     
 
 if __name__ == '__main__':
-    main("Test_new/match2.jpg", video_path="test_video.mp4")
+    #print(torch.cuda.is_available())
+    main("C:\\Users\\Aaditya Voruganti\\Desktop\\VortexLens\\screw_exploration\\Blob_detection\\Test_new\\match2.jpg")
     # test_num = 27
     # for i in range(0, test_num):
     #     test_with_image("Test_new/match2.jpg", "Test_new1/match" + str(i) + ".jpg")
