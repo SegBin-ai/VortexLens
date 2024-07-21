@@ -1,5 +1,5 @@
-secondary_color = '#DC143C'  # Crimson
-accent_color = '#000080'  # Navy Blue
+secondary_color = '#FFFFFF'  # White
+accent_color = '#DC143C'  # Navy Blue
 primary_color = '#FFFFFF'  # White
 styles = {
     'container': {
@@ -9,7 +9,7 @@ styles = {
     },
     'header': {
         'textAlign': 'center',
-        'color': secondary_color,
+        'color': accent_color,
     },
     'upload': {
         'width': '100%',
@@ -25,7 +25,7 @@ styles = {
     },
     'button': {
         'backgroundColor': secondary_color,
-        'borderColor': secondary_color,
+        'borderColor': accent_color,
         'color': accent_color,
         'marginTop': '20px'
     },
