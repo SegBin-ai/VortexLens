@@ -1,0 +1,12 @@
+images
+# Ignore all files in the train/images directory
+Weld-quality-inspection-9/train/images/*
+
+# Ignore all files in the train/labels directory
+Weld-quality-inspection-9/train/labels/*
+
+# Ignore all .jpg files
+*.jpg
+
+# Ignore all .txt files
+*.txt
